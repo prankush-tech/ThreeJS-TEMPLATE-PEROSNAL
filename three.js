@@ -9,65 +9,71 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 export default class threeJS 
 {
 	constructor(options) 
-    {
+	{
 		this.gsap = gsap.registerPlugin(ScrollTrigger);
 		this.previousTime = 0;
 		this.time = 0;
 		this.container = options.dom;
-
+	
 		this.scene = new THREE.Scene();
 		this.width = this.container.offsetWidth;
 		this.height = this.container.offsetHeight;
-
-
+	
+	
 		this.camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 0.01, 1000);
 		this.camera.position.set(0, 0, 10);
-
-
+	
+	
 		this.renderer = new THREE.WebGLRenderer();
 		this.renderer.setSize(this.width, this.height);
-        this.container.appendChild(this.renderer.domElement);
-
+		this.container.appendChild(this.renderer.domElement);
+	
 		this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
+	
 		this.clock = new THREE.Clock();
-        
-        
-
-
+	
+	
+	
+	
 		this.dracoloader = new DRACOLoader();
 		this.dracoloader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
 		this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
 		this.renderer.toneMappingExposure = 1.6;
-
+	
 		this.gltf = new GLTFLoader();
 		this.gltf.setDRACOLoader(this.dracoloader);
 		this.isPlaying = true;
-
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.update();
-        this.controls.enableDamping =true
-        this.controls.dampingFactor =0.1
-
-
-
-
+	
+		this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+		this.controls.update();
+		this.controls.enableDamping =true
+		this.controls.dampingFactor =0.1
+	
+	
+	
+	
 		this.settings();
 		this.initiPost();
-        this.addObjects();
+		this.addObjects();
 		this.render();
 		this.resize();
 		this.setupResize();
 	}
-    
-    addObjects()
-    {
-        this.geometry = new THREE.BoxGeometry(1, 1, 1);
-        this.material = new THREE.MeshNormalMaterial();
-        this.cube = new THREE.Mesh(this.geometry, this.material);
-        this.scene.add(this.cube);
-    }
-	settings() {
+	
+	
+	
+	addObjects()
+	{
+	this.geometry = new THREE.BoxGeometry(1, 1, 1);
+	this.material = new THREE.MeshNormalMaterial();
+	this.cube = new THREE.Mesh(this.geometry, this.material);
+	this.scene.add(this.cube);
+	}
+	
+	
+	
+	settings()
+	{
 		let that = this;
 		this.settings = {
 			exposure: 0.3,
@@ -80,18 +86,18 @@ export default class threeJS
 			that.renderer.toneMappingExposure = this.settings.exposure;
 		});
 	}
-
-
+	
+	
 	setupResize() {
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-		window.addEventListener('resize', this.resize.bind(this));
+	this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+	window.addEventListener('resize', this.resize.bind(this));
 	}
-    initiPost() 
-    {
-
+	initiPost() 
+	{
+	
 	}
-
-
+	
+	
 	resize() {
 		this.width = this.container.offsetWidth;
 		this.height = this.container.offsetHeight;
@@ -110,21 +116,21 @@ export default class threeJS
 			this.isPlaying = true;
 		}
 	}
-
-    render()
-    {
-        this.elapsedTime = this.clock.getElapsedTime();
+	
+	render()
+	{
+	this.elapsedTime = this.clock.getElapsedTime();
 		this.deltaTime = this.elapsedTime - this.previousTime;
 		this.previousTime = this.elapsedTime;
 		this.time = 0.05;
-
-        
+	
+	
 		requestAnimationFrame(this.render.bind(this));
 		this.renderer.render(this.scene, this.camera);
 		this.renderer.clearDepth();
-
+	
 		if (!this.isPlaying) return;
-        this.controls.update()
-
-    }
+	this.controls.update()
+	
+	}
 }
