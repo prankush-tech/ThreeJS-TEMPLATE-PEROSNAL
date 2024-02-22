@@ -1,14 +1,17 @@
 import * as THREE from 'three';
-import { gsap } from 'gsap';
 import * as dat from 'dat.gui';
+import vertexShader from './shaders/vertex.glsl'
+import fragmentShader from './shaders/fragment.glsl'
+import AbstractImage from '/abs.png'
+import Stats from 'stats.js'
+import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import Stats from 'stats.js'
-import vertexShader from './shaders/vertex.glsl'
-import fragmentShader from './shaders/fragment.glsl'
-
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 
 export default class threeJS {
@@ -22,6 +25,13 @@ export default class threeJS {
 		console.log(this.stats.showPanel)
 		this.stats.showPanel(0)
 		this.container.appendChild(this.stats.dom);
+
+		this.params = {
+			exposure: 1,
+			bloomStrength: 1.5,
+			bloomThreshold: 0,
+			bloomRadius: 0
+		  };
 		
 
 
@@ -31,7 +41,7 @@ export default class threeJS {
 		this.height = this.container.offsetHeight;
 
 		this.camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 0.01, 1000);
-		this.camera.position.set(0, 0, 20);
+		this.camera.position.set(0, 10, 10);
 
 		this.renderer = new THREE.WebGLRenderer({
 			antialias: true,
@@ -58,6 +68,13 @@ export default class threeJS {
 		this.controls.enableDamping = true;
 		this.controls.dampingFactor = 0.1;
 
+
+		//bloom
+
+
+
+		
+
 		this.settings();
 		this.initiPost();
 		this.addObjects();
@@ -67,18 +84,22 @@ export default class threeJS {
 	}
 
 	addObjects() {
-		// this.geometry = new THREE.SphereGeometry(1,32,32);
-		this.geometry = new THREE.PlaneGeometry(2,2,10,10);
+		// this.geometry = new THREE.SphereGeometry(1,128,128);
+		// this.geometry = new THREE.PlaneGeometry(2,2,10,10);
+		this.geometry = new THREE.IcosahedronGeometry(1,150);
+
+
 		this.material = new THREE.ShaderMaterial({
 			uniforms:{
-				utime:{value:0},
+				uTime:{value:0},
 				// uResolution:{value:0},
+				uTexture:{value: new THREE.TextureLoader().load(AbstractImage)}
 			},
 			vertexShader:vertexShader,
 			fragmentShader:fragmentShader,
 			// wireframe:true
 		});
-		console.log(this.material)
+		
 		this.cube = new THREE.Mesh(this.geometry, this.material);
 		this.scene.add(this.cube);
 	}
@@ -122,7 +143,8 @@ export default class threeJS {
 		}
 	}
 
-	render() {
+	render() 
+	{
 		this.elapsedTime = this.clock.getElapsedTime();
 		this.deltaTime = this.elapsedTime - this.previousTime;
 		this.previousTime = this.elapsedTime;
@@ -136,5 +158,8 @@ export default class threeJS {
 		this.controls.update();
 
 		this.stats.update()
+		
+		this.material.uniforms.uTime.value += this.time;
+		
 	}
 }

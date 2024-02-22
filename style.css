@@ -3,7 +3,7 @@
 	padding: 0;
 	overflow-x: hidden;
 	user-select: none;
-	background-color: rgb(255, 255, 255);
+	background-color: rgb(16, 16, 16);
 }
 
 #container {
@@ -13,3 +13,14 @@
 	width: 100vw;
 	height: 100vh;
 }
+::-webkit-scrollbar {
+	display: none;
+  }
+  
+  ::-webkit-scrollbar-button {
+	display: none;
+  }
+  
+  body {
+	-ms-overflow-style:none;
+  }
