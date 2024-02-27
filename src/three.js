@@ -24,7 +24,7 @@ export default class threeJS {
 		this.stats = new Stats()
 		console.log(this.stats.showPanel)
 		this.stats.showPanel(0)
-		this.container.appendChild(this.stats.dom);
+		// this.container.appendChild(this.stats.dom);
 
 		this.params = {
 			exposure: 1,
@@ -84,7 +84,7 @@ export default class threeJS {
 	}
 
 	addObjects() {
-		// this.geometry = new THREE.SphereGeometry(1,128,128);
+		// this.geometry = new THREE.SphereGeometry(1,1024,1024);
 		// this.geometry = new THREE.PlaneGeometry(2,2,10,10);
 		this.geometry = new THREE.IcosahedronGeometry(1,150);
 

@@ -17,12 +17,6 @@ float smoothMod(float axis, float amp, float rad){
 }
 
 
-
-
-
-
-
-
 //Basic Perlin Noise
 //call NOISE( POSITION of vector 3)
 
@@ -124,11 +118,11 @@ void main() {
 	vNormal = normal;
 	vUv = uv;
 	vPosition = position;
-	vDisplacement =pattern;
+	vDisplacement = pattern;
 
 
 	//MVP
-	float displacement = vDisplacement/3.0;
+	float displacement = vDisplacement/4.0;
 	vec3 newPosition = position + (normal * displacement);
 	vec4 modelViewPosition = modelViewMatrix * vec4(newPosition,1.0);
 	vec4 projectedPosition = projectionMatrix * modelViewPosition;
