@@ -72,7 +72,6 @@ export default class threeJS {
 		//bloom
 
 
-
 		
 
 		this.settings();
@@ -107,10 +106,10 @@ export default class threeJS {
 	settings() {
 		let that = this;
 		this.settings = {
-			exposure: 0.3,
-			bloomThreshold: 0,
-			bloomStrength: 1.1,
-			bloomRadius: 1.1
+			exposure: 1,
+			bloomThreshold: 0.1,
+			bloomStrength: 0.5,
+			bloomRadius: 1.2
 		};
 		this.gui = new dat.GUI();
 		this.gui.add(this.settings, 'exposure', 0, 3, 0.1).onChange(() => {
@@ -122,14 +121,30 @@ export default class threeJS {
 		this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 		window.addEventListener('resize', this.resize.bind(this));
 	}
-	initiPost() {}
+	initiPost() {
+		this.renderTarget = new THREE.WebGLRenderTarget( this.width, this.height, this.settings );
+		
+		this.renderScene = new RenderPass(this.scene, this.camera);
+		this.bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+		this.bloomPass.threshold = this.settings.bloomThreshold;
+		this.bloomPass.strength = this.settings.bloomStrength;
+		this.bloomPass.radius = this.settings.bloomRadius;
+
+
+		this.composer = new EffectComposer(this.renderer, this.renderTarget);
+		this.composer.addPass(this.renderScene);
+		this.composer.addPass(this.bloomPass);
+
+
+
+	}
 
 	resize() {
 		this.width = this.container.offsetWidth;
 		this.height = this.container.offsetHeight;
 		this.renderer.setSize(this.width, this.height);
 		this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-		// this.composer.setSize(this.width, this.height);
+		this.composer.setSize(this.width, this.height);
 		this.camera.aspect = this.width / this.height;
 		this.camera.updateProjectionMatrix();
 	}
@@ -160,6 +175,10 @@ export default class threeJS {
 		this.stats.update()
 		
 		this.material.uniforms.uTime.value += this.time;
+
+
+		//for Bloom Enable this
+		// this.composer.render(this.scene, this.camera);
 		
 	}
 }
