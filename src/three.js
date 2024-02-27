@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import * as dat from 'dat.gui';
-import vertexShader from './shaders/vertex.glsl'
-import fragmentShader from './shaders/fragment.glsl'
+import vertexShader from '../shaders/vertex.glsl'
+import fragmentShader from '../shaders/fragment.glsl'
 import AbstractImage from '/abs.png'
 import Stats from 'stats.js'
 import { gsap } from 'gsap';
